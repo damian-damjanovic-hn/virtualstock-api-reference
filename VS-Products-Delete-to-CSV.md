@@ -26,20 +26,16 @@ Sub ExportProductsDeleteCSV()
     Dim line As String
     Dim currentDateTime As String
 
-    ' Set worksheet and table
     Set ws = ThisWorkbook.Sheets(1) ' Adjust if needed
     Set tbl = ws.ListObjects("products_delete")
 
-    ' Prepare file path
     currentDateTime = Format(Now, "yyyymmdd_HHmmss")
     fileName = "products_delete_" & currentDateTime & ".csv"
     exportPath = ThisWorkbook.Path & "\" & fileName
 
-    ' Open file for writing
     fileNum = FreeFile
     Open exportPath For Output As #fileNum
 
-    ' Write header
     line = ""
     For i = 1 To tbl.ListColumns.Count
         line = line & tbl.ListColumns(i).Name
@@ -47,7 +43,6 @@ Sub ExportProductsDeleteCSV()
     Next i
     Print #fileNum, line
 
-    ' Loop through rows
     exportCount = 0
     For Each row In tbl.ListRows
         partNumber = Trim(row.Range(1, tbl.ListColumns("part_number").Index).Value)
@@ -65,10 +60,8 @@ Sub ExportProductsDeleteCSV()
         End If
     Next row
 
-    ' Close file
     Close #fileNum
 
-    ' Show success message
     MsgBox exportCount & " row(s) exported to " & fileName, vbInformation, "Export Complete"
 End Sub
 
